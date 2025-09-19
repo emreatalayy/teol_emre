@@ -1,0 +1,6 @@
+# Gemini API Anahtarınızı buraya ekleyin
+GEMINI_API_KEY=your-actual-api-key-here
+
+# Flask ayarları
+FLASK_ENV=development
+FLASK_DEBUG=True

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - Sesli Asistan</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>Gemini AI Asistan</h1>
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span class="status-text" id="statusText">Bağlanıyor...</span>
+            </div>
+        </header>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Merhaba! Ben Gemini AI asistanınızım. Size nasıl yardımcı olabilirim? Hem yazarak hem de konuşarak benimle iletişim kurabilirsiniz.</p>
+                        <span class="message-time">Şimdi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <textarea 
+                    id="messageInput" 
+                    placeholder="Mesajınızı yazın veya mikrofon tuşuna basın..." 
+                    rows="1"
+                ></textarea>
+                <div class="input-actions">
+                    <button class="mic-button" id="micButton" title="Ses kaydı">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="send-button" id="sendButton" title="Gönder">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="voice-controls">
+                <button class="voice-control-btn" id="speakButton" title="Son mesajı oku">
+                    <i class="fas fa-volume-up"></i>
+                    <span>Oku</span>
+                </button>
+                <button class="voice-control-btn" id="stopSpeakButton" title="Konuşmayı durdur">
+                    <i class="fas fa-volume-mute"></i>
+                    <span>Durdur</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="recording-indicator" id="recordingIndicator">
+            <div class="recording-animation">
+                <div class="pulse"></div>
+                <i class="fas fa-microphone"></i>
+            </div>
+            <p>Dinliyorum...</p>
+            <button class="stop-recording" id="stopRecording">
+                <i class="fas fa-stop"></i>
+                Durdur
+            </button>
+        </div>
+    </div>
+
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3>Ayarlar</h3>
+            <button class="close-settings" id="closeSettings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="settings-content">
+            <div class="setting-group">
+                <label for="apiKeyInput">Gemini API Anahtarı:</label>
+                <input type="password" id="apiKeyInput" placeholder="API anahtarınızı girin...">
+                <button class="api-key-save" id="saveApiKey">Kaydet</button>
+            </div>
+            <div class="setting-group">
+                <label for="voiceSelect">Ses Seçimi:</label>
+                <select id="voiceSelect"></select>
+            </div>
+            <div class="setting-group">
+                <label for="speechRate">Konuşma Hızı:</label>
+                <input type="range" id="speechRate" min="0.5" max="2" step="0.1" value="1">
+                <span id="rateValue">1.0</span>
+            </div>
+            <div class="setting-group">
+                <label for="speechPitch">Ses Tonu:</label>
+                <input type="range" id="speechPitch" min="0" max="2" step="0.1" value="1">
+                <span id="pitchValue">1.0</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="settings-button" id="settingsButton" title="Ayarlar">
+        <i class="fas fa-cog"></i>
+    </button>
+
+    <script>
+        // Gemini API anahtarını buraya ekleyin
+        window.GEMINI_API_KEY = 'AIzaSyDbM3AAFaVFEw9GVOdtSn2c4Pge_L80lXc';
+        // Yukarıdaki satırdaki 'AIzaSyC-your-actual-api-key-here' kısmını 
+        // gerçek API anahtarınızla değiştirin
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
