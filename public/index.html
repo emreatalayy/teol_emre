@@ -138,14 +138,14 @@
                                class="rounded-full object-cover border-3 border-white shadow-lg transition-all duration-300 hover:scale-105" 
                                style="display: block;"
                                onerror="this.style.display='none'; document.getElementById('avatarPlaceholder').style.display='flex';">
-                            <source src="/static/ai-avatar.mp4" type="video/mp4">
+                            <source src="/ai-avatar.mp4" type="video/mp4">
                         </video>
                         
                         <!-- Fallback Avatar -->
                         <div id="avatarPlaceholder" 
-                             class="w-20 h-20 rounded-full bg-gradient-to-br from-teol-400 to-teol-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105" 
-                             style="display: none;">
-                            <i data-lucide="bot" class="w-8 h-8 text-white"></i>
+                             class="w-20 h-20 rounded-full shadow-lg transition-all duration-300 hover:scale-105" 
+                             style="display: flex;">
+                            <img src="/avatar.svg" alt="TEOL Avatar" class="w-full h-full rounded-full">
                         </div>
                         
                         <!-- Konuşma Durumu -->

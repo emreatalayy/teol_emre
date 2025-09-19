@@ -1,42 +1,44 @@
-from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
+from http.server import BaseHTTPRequestHandler
+import json
 import google.generativeai as genai
 import os
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
-
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
-CORS(app)
-
-# Configure Gemini AI
-API_KEY = os.getenv('GEMINI_API_KEY')
-if API_KEY:
-    genai.configure(api_key=API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    print(f"📊 Kullanılan API Anahtarı: {API_KEY[:20]}...")
-else:
-    model = None
-    print("⚠️ GEMINI_API_KEY bulunamadı!")
-
-def handler(request):
-    if request.method == 'GET':
-        if request.path == '/':
-            return render_template('index.html')
-        elif request.path == '/api/status':
-            return jsonify({"status": "online", "model": "gemini-1.5-flash"})
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # Status endpoint
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        
+        response_data = json.dumps({
+            "status": "online",
+            "message": "TEOL AI Asistan API çalışıyor",
+            "version": "1.0.0"
+        }, ensure_ascii=False)
+        
+        self.wfile.write(response_data.encode('utf-8'))
     
-    elif request.method == 'POST' and request.path == '/api/chat':
+    def do_POST(self):
         try:
-            data = request.get_json()
+            # Configure Gemini AI
+            API_KEY = os.getenv('GEMINI_API_KEY')
+            if not API_KEY:
+                self.send_error(500, "API key not configured")
+                return
+            
+            genai.configure(api_key=API_KEY)
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            # Read request data
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
+            
             user_message = data.get('message', '')
-            
             if not user_message:
-                return jsonify({"error": "Mesaj boş olamaz"}), 400
-            
-            if not model:
-                return jsonify({"error": "AI model yapılandırılmamış"}), 500
+                self.send_error(400, "Message cannot be empty")
+                return
             
             # System prompt for TEOL
             system_prompt = """Sen TEOL Dil Okulları'nın AI asistanısın. TEOL, 2013 ve 2014 yıllarında Türkiye ve Avrupa'nın en kaliteli dil okulu seçilmiş ve 2014 yılında dünya çapında en iyi dil okulu unvanını kazanmıştır. 
@@ -56,10 +58,23 @@ Sen samimi, yardımsever ve profesyonel bir asistansın. Dil öğrenimi, kurslar
             full_prompt = f"{system_prompt}\n\nKullanıcı: {user_message}\nAsistan:"
             response = model.generate_content(full_prompt)
             
-            return jsonify({"response": response.text})
+            # Send response
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+            self.end_headers()
+            
+            response_data = json.dumps({"response": response.text}, ensure_ascii=False)
+            self.wfile.write(response_data.encode('utf-8'))
             
         except Exception as e:
-            print(f"❌ Hata: {str(e)}")
-            return jsonify({"error": "Bir hata oluştu"}), 500
+            self.send_error(500, f"Server error: {str(e)}")
     
-    return jsonify({"error": "Method not allowed"}), 405
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
