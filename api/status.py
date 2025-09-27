@@ -1,19 +1,26 @@
+from http.server import BaseHTTPRequestHandler
 import json
 
-def handler(request):
-    # CORS headers
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Content-Type': 'application/json'
-    }
+class handler(BaseHTTPRequestHandler):
     
-    if request.method == 'OPTIONS':
-        return ('', 204, headers)
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+        return
     
-    return (json.dumps({
-        "status": "online",
-        "message": "TEOL AI Assistant Status API",
-        "version": "1.0.0"
-    }), 200, headers)
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        
+        response_data = {
+            "status": "online",
+            "message": "TEOL AI Assistant Status API",
+            "version": "1.0.0"
+        }
+        self.wfile.write(json.dumps(response_data).encode('utf-8'))
+        return

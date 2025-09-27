@@ -1,43 +1,60 @@
+from http.server import BaseHTTPRequestHandler
 import json
 import google.generativeai as genai
 import os
 
-def handler(request):
-    # CORS headers
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Content-Type': 'application/json'
-    }
+class handler(BaseHTTPRequestHandler):
     
-    if request.method == 'OPTIONS':
-        return ('', 204, headers)
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
+        return
     
-    if request.method == 'GET':
-        # Status endpoint
-        return (json.dumps({
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        
+        response_data = {
             "status": "online",
             "message": "TEOL AI Assistant API is running",
             "version": "1.0.0"
-        }), 200, headers)
+        }
+        self.wfile.write(json.dumps(response_data).encode('utf-8'))
+        return
     
-    if request.method == 'POST':
+    def do_POST(self):
         try:
             # Configure Gemini AI
             API_KEY = os.getenv('GEMINI_API_KEY')
             if not API_KEY:
-                return (json.dumps({'error': 'API key not configured'}), 500, headers)
+                self.send_response(500)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'API key not configured'}).encode('utf-8'))
+                return
             
             genai.configure(api_key=API_KEY)
             model = genai.GenerativeModel('gemini-1.5-flash')
             
             # Get message from request
-            data = request.get_json()
-            user_message = data.get('message', '') if data else ''
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
+            user_message = data.get('message', '')
             
             if not user_message:
-                return (json.dumps({'error': 'Message cannot be empty'}), 400, headers)
+                self.send_response(400)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'Message cannot be empty'}).encode('utf-8'))
+                return
             
             # System prompt for TEOL
             system_prompt = """You are the AI assistant for TEOL Language Schools. TEOL was selected as Turkey and Europe's highest quality language school in 2013 and 2014, and won the title of world's best language school in 2014.
@@ -57,9 +74,17 @@ You are a friendly, helpful and professional assistant. You provide information 
             full_prompt = f"{system_prompt}\n\nUser: {user_message}\nAssistant:"
             response = model.generate_content(full_prompt)
             
-            return (json.dumps({'response': response.text}), 200, headers)
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'response': response.text}).encode('utf-8'))
+            return
             
         except Exception as e:
-            return (json.dumps({'error': f'Server error: {str(e)}'}), 500, headers)
-    
-    return (json.dumps({'error': 'Method not allowed'}), 405, headers)
+            self.send_response(500)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': f'Server error: {str(e)}'}).encode('utf-8'))
+            return
