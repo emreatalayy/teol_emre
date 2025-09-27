@@ -11,10 +11,13 @@ app = Flask(__name__)
 CORS(app)
 
 # Gemini API konfigürasyonu
-# API anahtarınızı buraya direkt yazın veya environment variable olarak ayarlayın
-API_KEY = os.getenv('GEMINI_API_KEY', 'AIzaSyBG4K4ZgirpB1GpQ7FjVNDjYTDuXiwHEUQ')
-print(f"📊 Kullanılan API Anahtarı: {API_KEY[:20]}...")  # İlk 20 karakteri göster
-genai.configure(api_key=API_KEY)
+API_KEY = os.getenv('GEMINI_API_KEY')
+if API_KEY:
+    print(f"📊 Kullanılan API Anahtarı: {API_KEY[:20]}...")  # İlk 20 karakteri göster
+    genai.configure(api_key=API_KEY)
+else:
+    print("⚠️ GEMINI_API_KEY environment variable bulunamadı!")
+    raise ValueError("GEMINI_API_KEY environment variable gerekli")
 
 # Model konfigürasyonu
 # Kullanılacak model adını environment değişkeninden al veya varsayılan olarak

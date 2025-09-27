@@ -102,24 +102,26 @@
 <body class="min-h-screen" style="background: linear-gradient(135deg, var(--teol-50) 0%, #FFFFFF 40%, var(--teol-100) 100%);">
     
     <!-- Ana Konteyner -->
-    <div class="max-w-5xl mx-auto px-4 md:px-6 py-6 space-y-6">
+    <div class="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         
         <!-- Başlık Çubuğu -->
-        <header class="rounded-2xl bg-white shadow-[var(--shadow)] border border-[var(--border)] p-4 md:p-5 flex items-center justify-between animate-fadeIn">
-            <div class="flex items-center gap-3">
+        <header class="rounded-2xl bg-white shadow-[var(--shadow)] border border-[var(--border)] p-3 sm:p-4 md:p-5 flex items-center justify-between animate-fadeIn">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <!-- TEOL Logo (SVG placeholder) -->
-                <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-teol-500 to-teol-600 flex items-center justify-center">
-                    <i data-lucide="brain-circuit" class="w-5 h-5 text-white"></i>
+                <div class="h-6 w-6 sm:h-8 sm:w-8 rounded-lg bg-gradient-to-br from-teol-500 to-teol-600 flex items-center justify-center">
+                    <i data-lucide="brain-circuit" class="w-3 h-3 sm:w-5 sm:h-5 text-white"></i>
                 </div>
-                <h1 class="text-xl md:text-2xl font-semibold text-[var(--teol-700)]">
-                    TEOL AI Asistan
+                <h1 class="text-lg sm:text-xl md:text-2xl font-semibold text-[var(--teol-700)]">
+                    <span class="hidden sm:inline">TEOL AI Asistan</span>
+                    <span class="sm:hidden">TEOL AI</span>
                 </h1>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <!-- TEOL Badge -->
-                <span class="px-3 py-1 rounded-full text-xs border border-[var(--teol-200)] bg-gradient-to-r from-[var(--teol-50)] to-[var(--teol-100)] text-[var(--teol-700)] font-medium">
+                <span class="px-2 sm:px-3 py-1 rounded-full text-xs border border-[var(--teol-200)] bg-gradient-to-r from-[var(--teol-50)] to-[var(--teol-100)] text-[var(--teol-700)] font-medium">
                     <i data-lucide="graduation-cap" class="w-3 h-3 inline mr-1"></i>
-                    Dil Kursları
+                    <span class="hidden sm:inline">Dil Kursları</span>
+                    <span class="sm:hidden">Dil</span>
                 </span>
             </div>
         </header>
@@ -128,24 +130,14 @@
         <div class="rounded-2xl bg-white shadow-[var(--shadow)] border border-[var(--border)] overflow-hidden animate-fadeIn">
             
             <!-- Avatar Bölümü -->
-            <div class="p-4 md:p-6 border-b border-[var(--border)] bg-gradient-to-br from-[var(--teol-100)] via-[var(--teol-50)] to-white">
+            <div class="p-3 sm:p-4 md:p-6 border-b border-[var(--border)] bg-gradient-to-br from-[var(--teol-100)] via-[var(--teol-50)] to-white">
                 <div class="flex flex-col items-center text-center space-y-4">
-                    <!-- Avatar Video/Placeholder -->
+                    <!-- Avatar -->
                     <div class="relative">
-                        <video id="aiAvatar" 
-                               width="80" height="80" 
-                               muted loop 
-                               class="rounded-full object-cover border-3 border-white shadow-lg transition-all duration-300 hover:scale-105" 
-                               style="display: block;"
-                               onerror="this.style.display='none'; document.getElementById('avatarPlaceholder').style.display='flex';">
-                            <source src="/ai-avatar.mp4" type="video/mp4">
-                        </video>
-                        
-                        <!-- Fallback Avatar -->
+                        <!-- Fallback Avatar (Ana Avatar) -->
                         <div id="avatarPlaceholder" 
-                             class="w-20 h-20 rounded-full shadow-lg transition-all duration-300 hover:scale-105" 
-                             style="display: flex;">
-                            <img src="/avatar.svg" alt="TEOL Avatar" class="w-full h-full rounded-full">
+                             class="w-20 h-20 rounded-full bg-gradient-to-br from-teol-400 to-teol-600 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105">
+                            <i data-lucide="bot" class="w-8 h-8 text-white"></i>
                         </div>
                         
                         <!-- Konuşma Durumu -->
@@ -162,7 +154,7 @@
             </div>
             
             <!-- Sohbet Mesajları -->
-            <div class="h-[62vh] md:h-[66vh] overflow-y-auto custom-scrollbar p-4 md:p-6 space-y-4" id="chatMessages">
+            <div class="h-[50vh] sm:h-[60vh] md:h-[66vh] overflow-y-auto custom-scrollbar p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4" id="chatMessages">
                 
                 <!-- Hoş Geldin Mesajı -->
                 <div class="flex items-start gap-3 animate-fadeIn">
@@ -406,7 +398,7 @@
     <!-- Toast Bildirim Alanı -->
     <div id="toastContainer" class="fixed top-6 right-6 space-y-2 z-50"></div>
 
-    <script src="/script.js"></script>
+    <script src="/static/script.js"></script>
     
     <!-- Lucide ikonlarını başlat -->
     <script>
