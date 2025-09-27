@@ -9,9 +9,10 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         
         response_data = json.dumps({
-            "status": "online", 
-            "message": "TEOL AI Asistan API çalışıyor",
-            "model": "gemini-1.5-flash"
+            "status": "healthy", 
+            "message": "TEOL AI Assistant API is running",
+            "model": "gemini-1.5-flash",
+            "version": "1.0.0"
         }, ensure_ascii=False)
         
         self.wfile.write(response_data.encode('utf-8'))
