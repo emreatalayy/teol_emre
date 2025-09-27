@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/*.py": {
+      "runtime": "python3.9"
+    }
+  },
   "rewrites": [
     {
       "source": "/",
@@ -7,6 +12,10 @@
     {
       "source": "/script.js",
       "destination": "/public/script.js"
+    },
+    {
+      "source": "/style.css",
+      "destination": "/public/style.css"
     },
     {
       "source": "/api/(.*)",
