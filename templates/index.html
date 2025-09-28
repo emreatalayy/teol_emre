@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEOL AI Asistan - Dil Kursları</title>
+    <title>TEOL AI Assistant - Language Courses</title>
     
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,7 +120,7 @@
                 <!-- TEOL Badge -->
                 <span class="px-2 sm:px-3 py-1 rounded-full text-xs border border-[var(--teol-200)] bg-gradient-to-r from-[var(--teol-50)] to-[var(--teol-100)] text-[var(--teol-700)] font-medium">
                     <i data-lucide="graduation-cap" class="w-3 h-3 inline mr-1"></i>
-                    <span class="hidden sm:inline">Dil Kursları</span>
+                    <span class="hidden sm:inline">Language Courses</span>
                     <span class="sm:hidden">Dil</span>
                 </span>
             </div>
@@ -162,7 +162,7 @@
                         <i data-lucide="bot" class="w-4 h-4 text-[var(--teol-700)]"></i>
                     </div>
                     <div class="bg-[var(--teol-50)] border border-[var(--border)] text-[var(--teol-800)] rounded-2xl px-4 py-3 max-w-[78%] transition-all duration-200 hover:shadow-sm">
-                        <p class="leading-relaxed">Merhaba! Ben TEOL Dil Kursları için geliştirilmiş AI asistanınızım. Size nasıl yardımcı olabilirim? 🚀</p>
+                        <p class="leading-relaxed">Hello! I'm your AI assistant developed for TEOL Language Courses. How can I help you? 🚀</p>
                         <div class="text-[11px] text-[var(--muted)] mt-2" id="welcomeTime">Şimdi</div>
                     </div>
                 </div>
@@ -172,8 +172,8 @@
                     <div class="w-16 h-16 rounded-full bg-[var(--teol-50)] mb-4 flex items-center justify-center">
                         <i data-lucide="message-circle" class="w-8 h-8 text-[var(--teol-400)]"></i>
                     </div>
-                    <h3 class="font-medium text-[var(--teol-700)] mb-2">Henüz mesaj yok</h3>
-                    <p class="text-sm text-[var(--muted)]">Sohbete başlamak için aşağıya bir mesaj yazın</p>
+                    <h3 class="font-medium text-[var(--teol-700)] mb-2">No messages yet</h3>
+                    <p class="text-sm text-[var(--muted)]">Type a message below to start the conversation</p>
                 </div>
                 
             </div>
@@ -182,82 +182,82 @@
         <!-- Kontrol Çipleri -->
         <div class="flex flex-wrap gap-2 animate-fadeIn">
             <button class="text-[var(--danger)] border-[var(--danger)]/20 hover:bg-red-50 border px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 focus-ring" 
-                    id="clearHistoryBtn" title="Geçmişi Temizle">
+                    id="clearHistoryBtn" title="Clear History">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
-                <span class="hidden sm:inline">Sohbeti Temizle</span>
+                <span class="hidden sm:inline">Clear Chat</span>
             </button>
             
             <button class="bg-[var(--teol-50)] text-[var(--teol-700)] hover:bg-[var(--teol-100)] border border-[var(--border)] px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 focus-ring" 
-                    id="infoBtn" title="TEOL Hakkında">
+                    id="infoBtn" title="About TEOL">
                 <i data-lucide="info" class="w-4 h-4"></i>
-                <span class="hidden sm:inline">TEOL Hakkında</span>
+                <span class="hidden sm:inline">About TEOL</span>
             </button>
         </div>
 
-        <!-- Girdi Alanı -->
+        <!-- Input Area -->
         <div class="sticky bottom-0 rounded-2xl bg-white/90 backdrop-blur-teol shadow-[var(--shadow)] border border-[var(--border)] p-3 md:p-4 animate-fadeIn">
             <div class="flex items-end gap-3">
                 
-                <!-- Metin Girdi -->
+                <!-- Text Input -->
                 <div class="flex-1 relative">
                     <textarea 
                         id="messageInput" 
-                        placeholder="Mesajınızı yazın..." 
+                        placeholder="Type your message..." 
                         rows="1"
                         maxlength="1000"
                         class="w-full rounded-xl border border-[var(--border)] focus:ring-2 focus:ring-[var(--teol-300)] focus:border-[var(--teol-300)] px-4 py-3 resize-none transition-all duration-200 placeholder:text-[var(--muted)] text-sm leading-relaxed focus:outline-none"
                         style="min-height: 44px; max-height: 120px;"
                     ></textarea>
                     
-                    <!-- Karakter Sayacı -->
+                    <!-- Character Counter -->
                     <div class="absolute bottom-2 right-3 text-xs text-[var(--muted)] pointer-events-none">
                         <span id="charCount">0</span>/1000
                     </div>
                 </div>
                 
-                <!-- Ses Kaydı Butonu -->
+                <!-- Voice Recording Button -->
                 <button id="micButton" 
                         class="w-12 h-12 bg-[var(--teal-500)] hover:bg-[var(--teal-500)]/90 text-white rounded-full flex items-center justify-center transition-all duration-200 focus-ring relative overflow-hidden"
-                        title="Ses kaydı (basılı tut)">
+                        title="Voice recording (hold to record)">
                     <i data-lucide="mic" class="w-5 h-5"></i>
-                    <!-- Kayıt göstergesi -->
+                    <!-- Recording indicator -->
                     <div id="micRipple" class="absolute inset-0 rounded-full bg-white/20 scale-0 animate-ripple opacity-0"></div>
                 </button>
                 
-                <!-- Gönder Butonu -->
+                <!-- Send Button -->
                 <button id="sendButton" 
                         class="bg-[var(--teol-500)] hover:bg-[var(--teol-600)] text-white rounded-xl px-4 py-3 font-medium transition-all duration-200 flex items-center gap-2 focus-ring disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Gönder (Enter)">
+                        title="Send (Enter)">
                     <i data-lucide="send" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">Gönder</span>
+                    <span class="hidden sm:inline">Send</span>
                 </button>
             </div>
             
-            <!-- Ses Kontrolleri -->
+            <!-- Voice Controls -->
             <div class="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--border)]">
                 <button id="speakButton" 
                         class="bg-[var(--teol-50)] text-[var(--teol-700)] hover:bg-[var(--teol-100)] border border-[var(--border)] px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 focus-ring"
-                        title="Son mesajı oku">
+                        title="Read last message">
                     <i data-lucide="volume-2" class="w-4 h-4"></i>
-                    <span>Oku</span>
+                    <span>Speak</span>
                 </button>
                 
                 <button id="stopSpeakButton" 
                         class="bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 focus-ring disabled:opacity-50"
-                        title="Konuşmayı durdur" disabled>
+                        title="Stop speaking" disabled>
                     <i data-lucide="volume-x" class="w-4 h-4"></i>
-                    <span>Durdur</span>
+                    <span>Stop</span>
                 </button>
                 
-                <!-- Konuşma Durumu -->
+                <!-- Speaking Status -->
                 <div id="speakingStatus" class="hidden bg-[var(--teal-500)]/10 text-[var(--teal-500)] px-3 py-2 rounded-lg text-sm font-medium animate-fadeIn">
                     <i data-lucide="volume-2" class="w-4 h-4 inline mr-1 animate-pulse"></i>
-                    Konuşuyor...
+                    Speaking...
                 </div>
             </div>
         </div>
 
-        <!-- Kayıt Göstergesi -->
+        <!-- Recording Indicator -->
         <div id="recordingIndicator" class="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-all duration-300">
             <div class="bg-white rounded-2xl p-6 text-center shadow-2xl max-w-sm mx-4 animate-fadeIn">
                 <div class="relative mb-4">
@@ -266,8 +266,8 @@
                     </div>
                     <div class="absolute inset-0 w-16 h-16 mx-auto border-4 border-red-500/30 rounded-full animate-ripple"></div>
                 </div>
-                <h3 class="font-semibold text-gray-900 mb-2">Dinliyorum...</h3>
-                <p class="text-sm text-gray-600 mb-4">Konuşmaya başlayın</p>
+                <h3 class="font-semibold text-gray-900 mb-2">Listening...</h3>
+                <p class="text-sm text-gray-600 mb-4">Start speaking</p>
                 <button id="stopRecording" 
                         class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 mx-auto">
                     <i data-lucide="square" class="w-4 h-4"></i>
@@ -355,10 +355,10 @@
                 </select>
             </div>
             
-            <!-- Konuşma Hızı -->
+            <!-- Speech Rate -->
             <div class="space-y-2">
                 <label class="block text-xs font-medium text-[var(--muted)]" for="speechRate">
-                    Konuşma Hızı: <span id="rateValue" class="font-semibold">1.0</span>
+                    Speech Rate: <span id="rateValue" class="font-semibold">1.0</span>
                 </label>
                 <input type="range" 
                        id="speechRate" 
@@ -369,10 +369,10 @@
                        class="w-full h-2 bg-[var(--teol-100)] rounded-lg appearance-none cursor-pointer slider">
             </div>
             
-            <!-- Ses Tonu -->
+            <!-- Voice Pitch -->
             <div class="space-y-2">
                 <label class="block text-xs font-medium text-[var(--muted)]" for="speechPitch">
-                    Ses Tonu: <span id="pitchValue" class="font-semibold">1.0</span>
+                    Voice Pitch: <span id="pitchValue" class="font-semibold">1.0</span>
                 </label>
                 <input type="range" 
                        id="speechPitch" 
