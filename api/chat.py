@@ -26,7 +26,7 @@ class handler(BaseHTTPRequestHandler):
                 return
             
             genai.configure(api_key=API_KEY)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-2.0-flash')
             
             # Get message from request
             content_length = int(self.headers.get('Content-Length', 0))
