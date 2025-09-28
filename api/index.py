@@ -29,24 +29,56 @@ class handler(BaseHTTPRequestHandler):
     
     def do_POST(self):
         try:
-            # Configure Gemini AI
+            # Debug info
+            content_length = int(self.headers.get('Content-Length', 0))
+            
+            # API key check
             API_KEY = os.getenv('GEMINI_API_KEY')
             if not API_KEY:
                 self.send_response(500)
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
-                self.wfile.write(json.dumps({'error': 'API key not configured'}).encode('utf-8'))
+                error_response = {
+                    'error': 'API key not configured',
+                    'debug': 'GEMINI_API_KEY environment variable not found'
+                }
+                self.wfile.write(json.dumps(error_response).encode('utf-8'))
                 return
             
-            genai.configure(api_key=API_KEY)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            # Import and configure genai
+            try:
+                import google.generativeai as genai
+                genai.configure(api_key=API_KEY)
+                model = genai.GenerativeModel('gemini-1.5-flash')
+            except Exception as import_error:
+                self.send_response(500)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                error_response = {
+                    'error': 'Failed to configure AI model',
+                    'debug': str(import_error)
+                }
+                self.wfile.write(json.dumps(error_response).encode('utf-8'))
+                return
             
-            # Get message from request
-            content_length = int(self.headers.get('Content-Length', 0))
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
-            user_message = data.get('message', '')
+            # Read and parse request body
+            try:
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data.decode('utf-8'))
+                user_message = data.get('message', '')
+            except Exception as parse_error:
+                self.send_response(400)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                error_response = {
+                    'error': 'Failed to parse request',
+                    'debug': str(parse_error)
+                }
+                self.wfile.write(json.dumps(error_response).encode('utf-8'))
+                return
             
             if not user_message:
                 self.send_response(400)
@@ -71,20 +103,36 @@ Information about TEOL:
 You are a friendly, helpful and professional assistant. You provide information about language learning, courses, and TEOL services. You speak English and communicate naturally. Be polite and professional in your responses."""
             
             # Generate response
-            full_prompt = f"{system_prompt}\n\nUser: {user_message}\nAssistant:"
-            response = model.generate_content(full_prompt)
+            try:
+                full_prompt = f"{system_prompt}\n\nUser: {user_message}\nAssistant:"
+                response = model.generate_content(full_prompt)
+                
+                self.send_response(200)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'response': response.text}).encode('utf-8'))
+                return
+            except Exception as ai_error:
+                self.send_response(500)
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                error_response = {
+                    'error': 'AI generation failed',
+                    'debug': str(ai_error)
+                }
+                self.wfile.write(json.dumps(error_response).encode('utf-8'))
+                return
             
-            self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({'response': response.text}).encode('utf-8'))
-            return
-            
-        except Exception as e:
+        except Exception as general_error:
             self.send_response(500)
             self.send_header('Access-Control-Allow-Origin', '*')
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
-            self.wfile.write(json.dumps({'error': f'Server error: {str(e)}'}).encode('utf-8'))
+            error_response = {
+                'error': 'General server error',
+                'debug': str(general_error)
+            }
+            self.wfile.write(json.dumps(error_response).encode('utf-8'))
             return
